@@ -1,6 +1,7 @@
 '''
 TODO value check in install_dot
 TODO same_dots list should to be relocated. to refresh correctly
+make doc test
 '''
 import string
 from generate_field import generate_field
@@ -25,7 +26,7 @@ def make_dict():
 
 def check_position(x, y):
     l = field
-    if l[y - 1][dict[x]] != 0:
+    if l[y][dict[x]] != 0:
         print("Position already occupied")
 
 
@@ -37,7 +38,7 @@ def check_around(y, x):
     :param y:
     :return:
     '''
-    list_yx = [[-1, 1], [-2, 1], [-2, 0], [-2, -1], [-1, -1], [0, -1], [0, 0], [0, 1]]
+    list_yx = [[0, 1], [-1, 1], [-1, 0], [-1, -1], [0, -1], [1, -1], [1, 0], [1, 1]]
     marker = 1
     same_dots = []
     for i in list_yx:
@@ -46,7 +47,7 @@ def check_around(y, x):
     return same_dots
 
 def create_path(y, x):
-    dot_alpha = [y - 1, x]
+    dot_alpha = [y, x]
     print(dot_alpha)
     dot_start = dot_alpha
     dot_next = []
@@ -54,12 +55,12 @@ def create_path(y, x):
     print(dots_around)
     dots_path = []
     if dots_around != []:
-        print("work bitch!")
+        print("work!")
         while dot_alpha != dot_next:
             for i in dots_around:
-                dot_next = [i[0]+1, i[1]]
-                print(dot_next)
-                dots_around = check_around(i[0]+1, i[1])
+                dot_next = [i[0], i[1]]
+                print("dot next" + str(dot_next))
+                dots_around = check_around(i[0], i[1])
                 if dot_next != dot_start:
                     dot_start = dot_next
                     dots_path.append(dot_start)
@@ -82,7 +83,7 @@ def create_path(y, x):
                   #          print(dots_around)
                   #          print(dots_path)
         else:
-            print(dots_path)
+            print("dots path" + str(dots_path))
 
 
 
@@ -98,11 +99,11 @@ def install_dot(marker):
     while True:
         x, y = take_input()
         x = dict[x]
-        if l[y - 1][x] != 0:
+        if l[y][x] != 0:
             print("Position is already occupied")
             continue
         else:
-            l[y - 1][x] = marker
+            l[y][x] = marker
         create_path(y, x)
         return l
 
@@ -112,7 +113,7 @@ def take_input():
     Takes x and y params from user
     :return:
     '''
-    input_y = int(input("y?"))
+    input_y = int(input("y?")) - 1
     input_x = input("x?").upper()
     return input_x, input_y
 
@@ -123,7 +124,3 @@ field[1][2] = 1
 print(output_field(field))
 while True:
     output_field(install_dot(1))
-
-
-
-
