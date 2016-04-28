@@ -46,44 +46,38 @@ def check_around(y, x):
             same_dots.append([y + i[0], x + i[1]])
     return same_dots
 
-def create_path(y, x):
-    dot_alpha = [y, x]
-    print(dot_alpha)
-    dot_start = dot_alpha
-    dot_next = []
+def create_path(y, x, path = [], a = 0, b = 0):
+    '''
+    Function use check_around() func that:
+    looking for points that surround start point in hop equal 1
+    and that have the same marker(the same param of point)
+    After that it's begin to check for closed circuit, build by
+    points.
+    :param y: input y
+    :param x: input x
+    :param path: list with nested list's, consists coordinates of points,
+    which formed a closed circuit
+    :param a, b: vars that needed in order to exclude start point
+    from new search.
+    :return: created path.
+    '''
+    if [y, x] in path:
+        print(path)
+        print("Closed!")
+        return path
     dots_around = check_around(y, x)
-    print(dots_around)
-    dots_path = []
+    if [a, b] in dots_around:
+        dots_around.remove([a, b])
+    a, b = y, x
     if dots_around != []:
-        print("work!")
-        while dot_alpha != dot_next:
-            for i in dots_around:
-                dot_next = [i[0], i[1]]
-                print("dot next" + str(dot_next))
-                dots_around = check_around(i[0], i[1])
-                if dot_next != dot_start:
-                    dot_start = dot_next
-                    dots_path.append(dot_start)
-                    #if dots_around == []:
-                break
-
-                  #  print(dots_around)
-                  #  print(dots_path)
-                  #  for i in dots_around:
-                  #      dots_around = check_around(i[1], i[0])
-                  #      dot_next = [i[0], i[1]]
-                  #      print("part 2")
-                  #      if dot_next != dot_start:
-                  #          print("part 3")
-                  #          dot_start = dot_next
-                  #          dots_path.append(dot_start)
-                  #          if dots_around == []:
-                  #              break
-
-                  #          print(dots_around)
-                  #          print(dots_path)
-        else:
-            print("dots path" + str(dots_path))
+        path.append([y, x])
+        for i in dots_around:
+            create_path(i[0], i[1], path, a, b)
+    elif dots_around == []:
+        print("There is no dots around.")
+        path.clear()
+    else:
+        print("You SHALL NOT PASS!!!")
 
 
 
@@ -105,6 +99,7 @@ def install_dot(marker):
         else:
             l[y][x] = marker
         create_path(y, x)
+        print("After create_path")
         return l
 
 
